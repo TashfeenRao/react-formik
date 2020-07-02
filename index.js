@@ -13,10 +13,10 @@ const addTodoCreater = (todo) => {
         todo,
     }
 }
-const toggleTodoCreater = (todo) => {
+const toggleTodoCreater = (id) => {
     return {
         type: TOGGLE_TODO,
-        todo,
+        id,
     }
 }
 const removeTodoCreater = (id) => {
@@ -131,6 +131,9 @@ const addGoal = () => {
         name,
     }))
 }
+const toggleTodo = (e) => {
+    console.log(e.target.id)
+}
 document.getElementById('todoBtn').addEventListener('click',addTodo);
 document.getElementById('goalBtn').addEventListener('click',addGoal);
 
@@ -140,6 +143,10 @@ const addTodoToDOM = (todo) => {
     node.appendChild(text);
 
     document.getElementById('todos').appendChild(node);
+    node.style.textDecoration = todo.complete ? 'line-through' : 'none';
+    node.addEventListener('click',() => {
+        store.dispatch(toggleTodoCreater(todo.id))
+    });
 }
 const addGoalToDOM = (goal) => {
     const node = document.createElement('li');
