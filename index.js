@@ -24,6 +24,13 @@ const goals = (state = [], action) => {
     }
 }
 
+const app = (state = {}, action) => {
+    return {
+        todos: todos(state.todo, action),
+        goals: goals(state.goal, action)
+    }
+}
+
 
 const createStore = (reducer) => {
     let state;
@@ -49,7 +56,7 @@ const createStore = (reducer) => {
     }
 }
 
-const store = createStore(todos)
+const store = createStore(app)
 
 store.subscribe(() => {
     console.log("This is todos state", store.getState())
@@ -57,6 +64,70 @@ store.subscribe(() => {
 
 store.dispatch({
     type: 'ADD_TODO',
+    todo: {
+        id: 0,
+        name: 'learn Redux Tashfeen',
+        complete: false
+    }
+})
+store.dispatch({
+    type: 'ADD_GOALS',
+    todo: {
+        id: 0,
+        name: 'learn Redux Tashfeen goals',
+        complete: false
+    }
+})
+store.dispatch({
+    type: 'ADD_TODO',
+    todo: {
+        id: 1,
+        name: 'learn Redux Tashfeen',
+        complete: false
+    }
+})
+store.dispatch({
+    type: 'ADD_TODO',
+    todo: {
+        id: 2,
+        name: 'learn Redux Tashfeen',
+        complete: false
+    }
+})
+store.dispatch({
+    type: 'ADD_TODO',
+    todo: {
+        id: 3,
+        name: 'learn Redux Tashfeen',
+        complete: false
+    }
+})
+store.dispatch({
+    type: 'REMOVE_TODO',
+    todo: {
+        id: 2,
+        name: 'learn Redux Tashfeen',
+        complete: false
+    }
+})
+store.dispatch({
+    type: 'TOGGLE_TODO',
+    todo: {
+        id: 1,
+        name: 'learn Redux Tashfeen',
+        complete: true
+    }
+})
+store.dispatch({
+    type: 'ADD_GOALS',
+    todo: {
+        id: 1,
+        name: 'learn Redux Tashfeen',
+        complete: false
+    }
+})
+store.dispatch({
+    type: 'ADD_GOALS',
     todo: {
         id: 0,
         name: 'learn Redux Tashfeen',
