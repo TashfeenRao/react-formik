@@ -101,7 +101,13 @@ const createStore = (reducer) => {
 const store = createStore(app)
 
 store.subscribe(() => {
-    console.log("This is todos state", store.getState())
+    const { goals, todos } = store.getState();
+
+    document.getElementById('todos').innerHTML = '';
+    document.getElementById('goals').innerHTML = '';
+
+    goals.forEach(addGoalToDOM);
+    todos.forEach(addTodoToDOM);
 })
 
 const addTodo = () => {
@@ -127,6 +133,21 @@ const addGoal = () => {
 }
 document.getElementById('todoBtn').addEventListener('click',addTodo);
 document.getElementById('goalBtn').addEventListener('click',addGoal);
+
+const addTodoToDOM = (todo) => {
+    const node = document.createElement('li');
+    const text = document.createTextNode(todo.name);
+    node.appendChild(text);
+
+    document.getElementById('todos').appendChild(node);
+}
+const addGoalToDOM = (goal) => {
+    const node = document.createElement('li');
+    const text = document.createTextNode(goal.name);
+    node.appendChild(text);
+
+    document.getElementById('goals').appendChild(node);
+}
 // store.dispatch(addTodoCreater({
 //     id: 0,
 //     name: 'learn Redux Tashfeen',
