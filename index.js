@@ -4,6 +4,38 @@ const TOGGLE_TODO = 'TOGGLE_TODO';
 const ADD_GOALS = 'ADD_GOALS';
 const REMOVE_GOALS = 'REMOVE_GOALS';
 
+const addTodoCreater = (todo) => {
+    return {
+        type: ADD_TODO,
+        todo,
+    }
+}
+const toggleTodoCreater = (todo) => {
+    return {
+        type: TOGGLE_TODO,
+        todo,
+    }
+}
+const removeTodoCreater = (id) => {
+    return {
+        type: REMOVE_TODO,
+        id,
+    }
+}
+const addGoalCreater = (goal) => {
+    return {
+        type: ADD_GOALS,
+        goal,
+    }
+}
+const removeGoalCreater = (goal) => {
+    return {
+        type: REMOVE_GOALS,
+        goal,
+    }
+}
+
+
 
 const todos = (state = [], action) => {
 
@@ -33,8 +65,8 @@ const goals = (state = [], action) => {
 
 const app = (state = {}, action) => {
     return {
-        todos: todos(state.todo, action),
-        goals: goals(state.goal, action)
+        todos: todos(state.todos, action),
+        goals: goals(state.goals, action)
     }
 }
 
@@ -69,75 +101,42 @@ store.subscribe(() => {
     console.log("This is todos state", store.getState())
 })
 
-store.dispatch({
-    type: ADD_TODO,
-    todo: {
-        id: 0,
-        name: 'learn Redux Tashfeen',
-        complete: false
-    }
-})
-store.dispatch({
-    type: ADD_GOALS,
-    goal: {
-        id: 0,
-        name: 'learn Redux Tashfeen goals',
-        complete: false
-    }
-})
-store.dispatch({
-    type: ADD_TODO,
-    todo: {
-        id: 1,
-        name: 'learn Redux Tashfeen',
-        complete: false
-    }
-})
-store.dispatch({
-    type: ADD_TODO,
-    todo: {
-        id: 2,
-        name: 'learn Redux Tashfeen',
-        complete: false
-    }
-})
-store.dispatch({
-    type: ADD_TODO,
-    todo: {
-        id: 3,
-        name: 'learn Redux Tashfeen',
-        complete: false
-    }
-})
-store.dispatch({
-    type: REMOVE_TODO,
-    todo: {
-        id: 2,
-        name: 'learn Redux Tashfeen',
-        complete: false
-    }
-})
-store.dispatch({
-    type: TOGGLE_TODO,
-    todo: {
-        id: 1,
-        name: 'learn Redux Tashfeen',
-        complete: true
-    }
-})
-store.dispatch({
-    type: ADD_GOALS,
-    goal: {
-        id: 1,
-        name: 'learn Redux Tashfeen',
-        complete: false
-    }
-})
-store.dispatch({
-    type: ADD_GOALS,
-    goal: {
-        id: 2,
-        name: 'learn Redux Tashfeen',
-        complete: false
-    }
-})
+store.dispatch(addTodoCreater({
+    id: 0,
+    name: 'learn Redux Tashfeen',
+    complete: false
+}))
+store.dispatch(addTodoCreater({
+    id: 1,
+    name: 'learn Redux Tashfeen',
+    complete: false
+}))
+store.dispatch(addTodoCreater({
+    id: 2,
+    name: 'learn Redux Tashfeen',
+    complete: false
+}))
+store.dispatch(addTodoCreater({
+    id: 3,
+    name: 'learn Redux Tashfeen',
+    complete: false
+}))
+store.dispatch(addTodoCreater(1))
+store.dispatch(addTodoCreater(2))
+store.dispatch(addTodoCreater({
+    id: 1,
+    name: 'learn Redux Tashfeen',
+    complete: true
+}))
+store.dispatch(addGoalCreater({
+    id: 0,
+    name: 'Make Goals Tashfeen',
+}))
+store.dispatch(addGoalCreater({
+    id: 1,
+    name: 'Make Goals Tashfeen',
+}))
+store.dispatch(addGoalCreater({
+    id: 2,
+    name: 'Make Goals Tashfeen',
+}))
