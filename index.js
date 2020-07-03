@@ -66,6 +66,19 @@ const goals = (state = [], action) => {
     }
 }
 
+const checkAndDispatch = (store, action) => {
+    if (action.type === ADD_TODO &&
+        action.todo.name.toLowerCase().includes('bilal')) {
+        return alert('he is a good man');
+    }
+    if (action.type === ADD_GOALS &&
+        action.goal.name.toLowerCase().includes('bilal')) {
+        return alert('he is a good man');
+    }
+
+    return store.dispatch(action);
+  
+}
 const store = Redux.createStore(Redux.combineReducers({
     todos,
     goals,
@@ -86,7 +99,7 @@ const addTodo = () => {
     const name = input.value;
     input.value = '';
 
-    store.dispatch(addTodoCreater({
+    checkAndDispatch(store, addTodoCreater({
         id: generateId(),
         name,
         complete: false
@@ -97,7 +110,7 @@ const addGoal = () => {
     const name = input.value;
     input.value = '';
 
-    store.dispatch(addGoalCreater({
+    checkAndDispatch(store, addGoalCreater({
         id: generateId(),
         name,
     }))
@@ -115,21 +128,21 @@ const addTodoToDOM = (todo) => {
     const node = document.createElement('li');
     const text = document.createTextNode(todo.name);
     const removeBtn = createRemoveBtn(() => {
-        store.dispatch(removeTodoCreater(todo.id))
+        checkAndDispatch(store, removeTodoCreater(todo.id))
     })
     node.appendChild(text);
     node.appendChild(removeBtn);
     document.getElementById('todos').appendChild(node);
     node.style.textDecoration = todo.complete ? 'line-through' : 'none';
     node.addEventListener('click',() => {
-        store.dispatch(toggleTodoCreater(todo.id))
+        checkAndDispatch(store, toggleTodoCreater(todo.id))
     });
 }
 const addGoalToDOM = (goal) => {
     const node = document.createElement('li');
     const text = document.createTextNode(goal.name);
     const removeBtn = createRemoveBtn(() => {
-        store.dispatch(removeGoalCreater(goal.id))
+        checkAndDispatch(store, removeGoalCreater(goal.id))
     })
     node.appendChild(text);
     node.appendChild(removeBtn);
