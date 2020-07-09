@@ -164,7 +164,9 @@ const List = (props) => {
         <ul>
             {props.items.map(item => (
                 <li key={item.id}>
-                    <span>{item.name}</span>
+                    <span onClick={() => props.toggle && props.toggle(item)}
+                    style={{textDecoration: item.complete ? 'line-through' : 'none'}}
+                    >{item.name}</span>
                 <button onClick={() => props.removeItem(item)} >X</button>
                 </li>
             ))}
@@ -189,13 +191,19 @@ class Todos extends React.Component {
     removeItem = (todo) => {
         this.props.store.dispatch(removeTodoCreater(todo.id));
     }
+    toggleItem = (todo) => {
+        this.props.store.dispatch(toggleTodoCreater(todo.id))
+    }
     render() {
         return(
             <div>
                 <h1>TODOS</h1>
                 <input type="text" placeholder="ADD Todo" ref={(input) => this.input = input} />
                 <button onClick={this.addItem}>Add Todo</button>
-                <List items={this.props.todos} removeItem={this.removeItem}/>
+                <List 
+                items={this.props.todos} 
+                removeItem={this.removeItem} 
+                toggle={this.toggleItem} />
             </div>
         )
     }
