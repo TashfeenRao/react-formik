@@ -3,6 +3,7 @@ const REMOVE_TODO = 'REMOVE_TODO';
 const TOGGLE_TODO = 'TOGGLE_TODO';
 const ADD_GOALS = 'ADD_GOALS';
 const REMOVE_GOALS = 'REMOVE_GOALS';
+const RECEIVE_DATA = 'RECEIVE_DATA';
 
 const generateId = () => {
     return Math.random().toString(36).substring(2) + (new Date()).getTime().toString(36);
@@ -38,6 +39,13 @@ const removeGoalCreater = (id) => {
     }
 }
 
+const receiveDataAction = (todos,goals) => {
+    return {
+        type: RECEIVE_DATA,
+        todos,
+        goals,
+    }
+}
 
 
 const todos = (state = [], action) => {
@@ -50,6 +58,8 @@ const todos = (state = [], action) => {
         case TOGGLE_TODO:
             return state.map((todo) => todo.id !== action.id ? todo :
             Object.assign({}, todo, {complete: !todo.complete}))
+        case RECEIVE_DATA:
+            return action.todos;
         default:
             return state;
     }
@@ -58,9 +68,11 @@ const todos = (state = [], action) => {
 const goals = (state = [], action) => {
     switch(action.type) {
         case ADD_GOALS:
-            return state.concat([action.goal])
+            return state.concat([action.goal]);
         case REMOVE_GOALS:
-            return state.filter((goal) => goal.id !== action.id )
+            return state.filter((goal) => goal.id !== action.id );
+        case RECEIVE_DATA:
+            return action.goals;
         default:
             return state;
     }
@@ -175,6 +187,13 @@ class Goals extends React.Component {
 class App extends React.Component {
     componentDidMount = () =>{
         const { store } = this.props;
+        Promise.all([
+            API.fetchTodos(),
+            API.fetchGoals()
+        ]).then(([todos, goals ]) => {
+            store.dispatch(receiveDataAction(todos, goals))
+        })
+
         store.subscribe(() => this.forceUpdate());
     }
     render() {
