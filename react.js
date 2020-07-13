@@ -78,6 +78,15 @@ const goals = (state = [], action) => {
     }
 }
 
+const loading = (state=true, action) => {
+    switch(action.type) {
+        case RECEIVE_DATA:
+            return false
+        default:
+            return state;
+    }
+}
+
 const checker = (store) => (next) => (action) => {
     if (action.type === ADD_TODO &&
         action.todo.name.toLowerCase().includes('bilal')) {
@@ -102,6 +111,7 @@ const logger = (store) => (next) => (action) => {
 const store = Redux.createStore(Redux.combineReducers({
     todos,
     goals,
+    loading,
   }), Redux.applyMiddleware(checker, logger))
 
 
@@ -190,7 +200,7 @@ class App extends React.Component {
         Promise.all([
             API.fetchTodos(),
             API.fetchGoals()
-        ]).then(([todos, goals ]) => {
+        ]).then(([todos, goals,loading ]) => {
             store.dispatch(receiveDataAction(todos, goals))
         })
 
@@ -198,7 +208,11 @@ class App extends React.Component {
     }
     render() {
         const { store } = this.props;
-        const { todos, goals } = store.getState();
+        const { todos, goals, loading } = store.getState();
+
+        if (loading === true) {
+            return <h3>Loading..</h3>
+        }
         return(
             <div>
                 <Todos todos={todos} store={this.props.store}/>
