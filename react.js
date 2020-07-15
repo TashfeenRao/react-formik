@@ -47,6 +47,18 @@ const receiveDataAction = (todos,goals) => {
     }
 }
 
+const handleAddTodo = (name,cb) => {
+    return (dispatch) => {
+        return API.saveTodo(name)
+        .then((todo) => {
+            dispatch(addTodoCreater(todo));
+            cb();
+        }).catch(() => {
+            alert("an error has occured try again")
+        })
+    }
+}
+
 const handleDeleteTodo = (todo) => {
     return (dispatch) => {
         dispatch(removeTodoCreater(todo.id));
@@ -56,6 +68,21 @@ const handleDeleteTodo = (todo) => {
             dispatch(addTodoCreater(todo))
             alert('an error has occured try again!')
         })
+    }
+}
+
+const handleToggleItem = (todo) => {
+
+    return (dispatch) => {
+        
+        dispatch(toggleTodoCreater(todo.id));
+
+        return API.saveTodoToggle(todo.id).
+        catch(() => {
+    
+            dispatch(toggleTodoCreater(todo.id));
+            alert('an error has occured try again');
+        });
     }
 }
 
@@ -170,26 +197,16 @@ class Todos extends React.Component {
     addItem = (e) => {
         e.preventDefault()
 
-        return API.saveTodo(this.input.value)
-        .then((todo) => {
-            this.props.store.dispatch(addTodoCreater(todo));
-            this.input.value = '';
-        }).catch(() => {
-            alert("an error has occured try again")
-        })
+        this.props.store.dispatch(handleAddTodo(
+            this.input.value,
+            () => this.input.value = ''
+        ))
     }
     removeItem = (todo) => {
         this.props.store.dispatch(handleDeleteTodo(todo))
     }
     toggleItem = (todo) => {
-        this.props.store.dispatch(toggleTodoCreater(todo.id));
-
-        return API.saveTodoToggle(todo.id).
-        catch(() => {
-
-            this.props.store.dispatch(toggleTodoCreater(todo.id));
-            alert('an error has occured try again');
-        });
+        this.props.store.dispatch(handleToggleItem(todo));
 
     }
     render() {
