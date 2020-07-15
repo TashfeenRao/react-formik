@@ -154,7 +154,15 @@ class Todos extends React.Component {
         })
     }
     toggleItem = (todo) => {
-        this.props.store.dispatch(toggleTodoCreater(todo.id))
+        this.props.store.dispatch(toggleTodoCreater(todo.id));
+
+        return API.saveTodoToggle(todo.id).
+        catch(() => {
+
+            this.props.store.dispatch(toggleTodoCreater(todo.id));
+            alert('an error has occured try again');
+        });
+
     }
     render() {
         return(
