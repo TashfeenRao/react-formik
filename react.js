@@ -47,6 +47,16 @@ const receiveDataAction = (todos,goals) => {
     }
 }
 
+const handleInitialData = () => {
+    return (dispatch) => {
+        Promise.all([
+            API.fetchTodos(),
+            API.fetchGoals()
+        ]).then(([todos, goals,loading ]) => {
+            dispatch(receiveDataAction(todos, goals))
+        })
+    }
+}
 const handleAddTodo = (name,cb) => {
     return (dispatch) => {
         return API.saveTodo(name)
@@ -74,7 +84,7 @@ const handleDeleteTodo = (todo) => {
 const handleToggleItem = (todo) => {
 
     return (dispatch) => {
-        
+
         dispatch(toggleTodoCreater(todo.id));
 
         return API.saveTodoToggle(todo.id).
@@ -255,12 +265,8 @@ class Goals extends React.Component {
 class App extends React.Component {
     componentDidMount = () =>{
         const { store } = this.props;
-        Promise.all([
-            API.fetchTodos(),
-            API.fetchGoals()
-        ]).then(([todos, goals,loading ]) => {
-            store.dispatch(receiveDataAction(todos, goals))
-        })
+
+        store.dispatch(handleInitialData());
 
         store.subscribe(() => this.forceUpdate());
     }
