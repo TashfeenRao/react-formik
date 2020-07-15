@@ -47,6 +47,41 @@ const receiveDataAction = (todos,goals) => {
     }
 }
 
+const handleDeleteTodo = (todo) => {
+    return (dispatch) => {
+        dispatch(removeTodoCreater(todo.id));
+
+        return API.deleteTodo(todo.id).
+        catch(() => {
+            dispatch(addTodoCreater(todo))
+            alert('an error has occured try again!')
+        })
+    }
+}
+
+const handleAddGoal = (name,cb) => {
+    return (dispatch) => {
+        return API.saveGoal(name)
+        .then((goal) => {
+            dispatch(addGoalCreater(goal))
+            cb();
+        }).catch(() => {
+            alert("an error has occured try again")
+        })
+    }
+}
+
+const handleRemoveGoal = (goal) => {
+    return (dispatch) => {
+        dispatch(removeGoalCreater(goal.id));
+
+        API.deleteGoal(goal.id).
+        catch(() => {
+            dispatch(addGoalCreater(goal));
+            alert("an error has occured try again")
+        })
+    }
+}
 
 const todos = (state = [], action) => {
 
@@ -112,7 +147,7 @@ const store = Redux.createStore(Redux.combineReducers({
     todos,
     goals,
     loading,
-  }), Redux.applyMiddleware(checker, logger))
+  }), Redux.applyMiddleware(ReduxThunk.default,checker, logger))
 
 
 const List = (props) => {
@@ -134,24 +169,17 @@ class Todos extends React.Component {
 
     addItem = (e) => {
         e.preventDefault()
-        const name = this.input.value;
-        this.input.value = '';
-        this.props.store.dispatch(
-            addTodoCreater({
-                id: generateId(),
-                name,
-                complete: false
-            })
-        )
+
+        return API.saveTodo(this.input.value)
+        .then((todo) => {
+            this.props.store.dispatch(addTodoCreater(todo));
+            this.input.value = '';
+        }).catch(() => {
+            alert("an error has occured try again")
+        })
     }
     removeItem = (todo) => {
-        this.props.store.dispatch(removeTodoCreater(todo.id));
-
-        return API.deleteTodo(todo.id).
-        catch(() => {
-            this.props.store.dispatch(addTodoCreater(todo))
-            alert('an error has occured try again!')
-        })
+        this.props.store.dispatch(handleDeleteTodo(todo))
     }
     toggleItem = (todo) => {
         this.props.store.dispatch(toggleTodoCreater(todo.id));
@@ -182,22 +210,15 @@ class Todos extends React.Component {
 class Goals extends React.Component {
     addGoal = (e) => {
         e.preventDefault();
-        const name = this.input.value;
-        this.input.value = '';
-        this.props.store.dispatch(addGoalCreater({
-            id: generateId(),
-            name, 
-        }))
 
+        this.props.store.dispatch(handleAddGoal(
+            this.input.value,
+            () => this.input.value = ''
+        ))
     }
     removeItem =(goal) => {
-        this.props.store.dispatch(removeGoalCreater(goal.id));
 
-        API.deleteGoal(goal.id).
-        catch(() => {
-            this.props.store.dispatch(addGoalCreater(goal));
-            alert("an error has occured try again")
-        })
+        this.props.store.dispatch(handleRemoveGoal(goal));
     }
     render() {
         return(
