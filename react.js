@@ -146,6 +146,12 @@ class Todos extends React.Component {
     }
     removeItem = (todo) => {
         this.props.store.dispatch(removeTodoCreater(todo.id));
+
+        return API.deleteTodo(todo.id).
+        catch(() => {
+            this.props.store.dispatch(addTodoCreater(todo))
+            alert('an error has occured try again!')
+        })
     }
     toggleItem = (todo) => {
         this.props.store.dispatch(toggleTodoCreater(todo.id))
@@ -177,7 +183,13 @@ class Goals extends React.Component {
 
     }
     removeItem =(goal) => {
-        this.props.store.dispatch(removeGoalCreater(goal.id))
+        this.props.store.dispatch(removeGoalCreater(goal.id));
+
+        API.deleteGoal(goal.id).
+        catch(() => {
+            this.props.store.dispatch(addGoalCreater(goal));
+            alert("an error has occured try again")
+        })
     }
     render() {
         return(
