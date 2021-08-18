@@ -9,14 +9,15 @@ export default function Form() {
       email: "",
       password: "",
     },
+    onSubmit: (values) => {
+      console.log(values);
+    },
   });
-
-  console.log(formik.values);
 
   return (
     <div className='login-page'>
       <div className='form'>
-        <form className='register-form'>
+        <form className='register-form' onSubmit={formik.handleSubmit}>
           <input
             type='text'
             placeholder='name'
@@ -38,7 +39,9 @@ export default function Form() {
             onChange={formik.handleChange}
             value={formik.values.email}
           />
-          <button className='create'>Sign up</button>
+          <button type='submit' className='create'>
+            Sign up
+          </button>
         </form>
       </div>
     </div>
